@@ -34,7 +34,6 @@ st.markdown("Empowering Kenyan citizens with AI-driven bill analysis and feedbac
         tess_path = shutil.which('tesseract')
         st.write(f"Tesseract Path: {tess_path}")
         
-        # Extra check: Try to run the command version to see if it executes
         if tess_path:
             try:
                 import subprocess
@@ -43,7 +42,8 @@ st.markdown("Empowering Kenyan citizens with AI-driven bill analysis and feedbac
             except Exception as e:
                 st.error(f"Found path but failed to run: {e}")
         else:
-            st.error("Tesseract NOT found in PATH.")"""
+            st.error("Tesseract NOT found in PATH.")
+"""
 
 # Tabs
 tab1, tab2, tab3 = st.tabs(["📄 Select & Summarize", "🗳️ Give Feedback", "📊 Insights Dashboard"])
