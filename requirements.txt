@@ -1,0 +1,13 @@
+streamlit
+requests
+beautifulsoup4
+pdfplumber
+google-generativeai
+firebase_admin
+plotly
+wordcloud
+matplotlib
+python-dotenv
+pandas
+Pillow
+pytesseract
