@@ -3,7 +3,7 @@ import os
 import streamlit as st
 from google.api_core import exceptions as g_exceptions
 
-@st.cache_data(ttl='90d', max_entries=50)
+@st.cache_data(ttl='90d', max_entries=50, show_spinner=False)
 def summarize_bill(bill_text):
     """
     Sends bill text to Gemini for summarization and extraction.
@@ -70,7 +70,7 @@ def summarize_bill(bill_text):
     except Exception as e:
         return f"Unexpected AI Error:** A technical issue occurred. Details: {e}"
 
-@st.cache_data(ttl='1h', max_entries=10)
+@st.cache_data(ttl='1h', max_entries=10, show_spinner=False)
 def generate_insights(feedback_text):
     """
     Analyzes aggregated citizen feedback.

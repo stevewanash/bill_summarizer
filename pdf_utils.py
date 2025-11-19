@@ -51,7 +51,7 @@ def pdf_page_to_image(page, scale=300):
     # NOTE: If this fails, we will resort to a different library (PyMuPDF/fitz)
     # in the next troubleshooting step, but try this fix first.
 
-@st.cache_data(ttl="180d", max_entries=40)
+@st.cache_data(ttl="180d", max_entries=40, show_spinner=False)
 def download_and_extract_text_v2(url, max_pages=50): #Had to rename the function to v2 to bypass streamlit cache
     """
     Downloads PDF and extracts text, prioritizing OCR if initial extraction fails.
@@ -75,7 +75,7 @@ def download_and_extract_text_v2(url, max_pages=50): #Had to rename the function
         with pdfplumber.open(pdf_stream) as pdf:
             pages_to_read = min(len(pdf.pages), max_pages)
 
-            with st.spinner(f"Running"):
+            with st.spinner(f"Running OCR on {pages_to_read} pages..."):
                 for i in range(pages_to_read):
                     page = pdf.pages[i]
                     

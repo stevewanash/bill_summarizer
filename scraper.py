@@ -5,7 +5,7 @@ import streamlit as st
 
 BASE_URL = "https://www.parliament.go.ke"
 
-@st.cache_data(ttl="7d")
+@st.cache_data(ttl="7d", show_spinner=False)
 def get_bills():
     """
     Scrapes the Kenyan Parliament website for bills.
