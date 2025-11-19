@@ -27,24 +27,6 @@ if 'current_summary' not in st.session_state:
 st.title("🇰🇪 AI Legislative Summarizer & Citizen Voice")
 st.markdown("Empowering Kenyan citizens with AI-driven bill analysis and feedback.")
 
-"""with st.sidebar:
-    st.header("🔍 Debug Menu")
-    if st.button("Check Server Status"):
-        st.write(f"OS: {platform.system()}")
-        tess_path = shutil.which('tesseract')
-        st.write(f"Tesseract Path: {tess_path}")
-        
-        if tess_path:
-            try:
-                import subprocess
-                result = subprocess.run([tess_path, '--version'], capture_output=True, text=True)
-                st.code(result.stdout)
-            except Exception as e:
-                st.error(f"Found path but failed to run: {e}")
-        else:
-            st.error("Tesseract NOT found in PATH.")
-"""
-
 # Tabs
 tab1, tab2, tab3 = st.tabs(["📄 Select & Summarize", "🗳️ Give Feedback", "📊 Insights Dashboard"])
 
