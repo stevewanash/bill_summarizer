@@ -85,23 +85,16 @@ def download_and_extract_text_v2(url, max_pages=50): #Had to rename the function
                     if page_text and len(page_text.strip()) > 50:
                         # Success: Use the fast text
                         extracted_text += page_text.strip() + "\n"
-                        st.caption(f"Page {i+1} extracted digitally.")
                     else:
                         # 2. Failure: Run OCR on the page image (slow, but works on scans)
-                        try:
                             # Render page to PIL image
-                            page_img = pdf_page_to_image(page)
-                            
-                            # Use Tesseract to read text from the image
-                            ocr_text = pytesseract.image_to_string(page_img)
-                            
-                            if ocr_text:
-                                extracted_text += ocr_text.strip() + "\n"
-                                st.caption(f"Page {i+1} extracted via OCR.")
-                            else:
-                                st.caption(f"Page {i+1} skipped (OCR failed).")
-                        except Exception as ocr_e:
-                            st.caption(f"Page {i+1} OCR failed: {ocr_e}")
+                        page_img = pdf_page_to_image(page)
+                        
+                        # Use Tesseract to read text from the image
+                        ocr_text = pytesseract.image_to_string(page_img)
+                        
+                        if ocr_text:
+                            extracted_text += ocr_text.strip() + "\n"
 
         if not extracted_text:
             return "Error: Downloaded PDF, but neither digital extraction nor OCR found text."

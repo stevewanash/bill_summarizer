@@ -27,7 +27,7 @@ if 'current_summary' not in st.session_state:
 st.title("🇰🇪 AI Legislative Summarizer & Citizen Voice")
 st.markdown("Empowering Kenyan citizens with AI-driven bill analysis and feedback.")
 
-with st.sidebar: # Putting it in the sidebar keeps your main UI clean
+"""with st.sidebar:
     st.header("🔍 Debug Menu")
     if st.button("Check Server Status"):
         st.write(f"OS: {platform.system()}")
@@ -39,11 +39,11 @@ with st.sidebar: # Putting it in the sidebar keeps your main UI clean
             try:
                 import subprocess
                 result = subprocess.run([tess_path, '--version'], capture_output=True, text=True)
-                st.code(result.stdout) # Show the actual version output
+                st.code(result.stdout)
             except Exception as e:
                 st.error(f"Found path but failed to run: {e}")
         else:
-            st.error("Tesseract NOT found in PATH.")
+            st.error("Tesseract NOT found in PATH.")"""
 
 # Tabs
 tab1, tab2, tab3 = st.tabs(["📄 Select & Summarize", "🗳️ Give Feedback", "📊 Insights Dashboard"])
@@ -55,7 +55,7 @@ with tab1:
     st.header("Find and Analyze Bills")
     
     if st.button("🔄 Refresh Bill List from Parliament.go.ke"):
-        with st.spinner("Scraping Parliament website..."):
+        with st.spinner("Retrieving latest bills..."):
             st.session_state['bills'] = scraper.get_bills()
             if not st.session_state['bills']:
                 st.error("Could not find bills. The website structure might have changed.")
@@ -73,21 +73,24 @@ with tab1:
             url = bill_options[selected_bill_title]
             
             with st.status("Processing Bill...", expanded=True) as status:
-                st.write("📥 Downloading PDF...")
+                st.write("Preparing document and running analysis...")
 
                 text = pdf_utils.download_and_extract_text_v2(url)
                 st.session_state['current_bill_text'] = text
 
                 if "Error:" in text: # Check for the error string returned by pdf_utils
-                    st.error("PDF Text Extraction Failed. Check the browser console for details.")
-                    status.update(label="Failed to Extract Text", state="error", expanded=True)
+                    st.error("PDF Text Extraction Failed. Try again later")
+                    status.update(label="Document processing failed", state="error", expanded=True)
                     st.stop() # Stop here if extraction failed!
                 
-                st.write("🤖 Analyzing with Gemini AI...")
+                st.write("🤖 Running AI analysis...")
                 summary = llm_utils.summarize_bill(text)
                 st.session_state['current_summary'] = summary
-                
-                status.update(label="Complete!", state="complete", expanded=False)
+
+                if "Service Temporarily Unavailable" in summary:
+                    status.update(label="AI Service Failed", state="error", expanded=True)
+                else:
+                    status.update(label="Complete!", state="complete", expanded=False)
 
     # Display Result
     if st.session_state['current_summary']:

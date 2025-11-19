@@ -1,6 +1,7 @@
 import google.generativeai as genai
 import os
 import streamlit as st
+from google.api_core import exceptions as g_exceptions
 
 @st.cache_data(ttl='90d', max_entries=50)
 def summarize_bill(bill_text):
@@ -60,8 +61,14 @@ def summarize_bill(bill_text):
     try:
         response = model.generate_content(prompt)
         return response.text
+    except g_exceptions.ResourceExhausted:
+        return (
+            "**AI Service Temporarily Unavailable**\n\n"
+            "We've hit the daily usage limit (quota) for the AI service. "
+            "Please try again later or tomorrow. This ensures the service remains free to use!"
+        )
     except Exception as e:
-        return f"AI Error: {e}"
+        return f"Unexpected AI Error:** A technical issue occurred. Details: {e}"
 
 @st.cache_data(ttl='1h', max_entries=10)
 def generate_insights(feedback_text):
