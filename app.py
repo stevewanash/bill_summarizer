@@ -9,6 +9,8 @@ import scraper
 import pdf_utils
 import llm_utils
 import feedback_utils
+import shutil
+import platform
 
 # Page Config
 st.set_page_config(page_title="KeLegislate AI", layout="wide")
@@ -55,10 +57,12 @@ with tab1:
             
             with st.status("Processing Bill...", expanded=True) as status:
                 st.write("📥 Downloading PDF...")
+                
+                if st.button("Check Server Status"):
+                    st.write(f"OS: {platform.system()}")
+                    st.write(f"Tesseract Path: {shutil.which('tesseract')}")
                 text = pdf_utils.download_and_extract_text(url)
                 st.session_state['current_bill_text'] = text
-                # 🚨 TEMPORARY DEBUG LINE 🚨
-                st.info(f"--- Extracted Text Start --- \n {text[:500]} \n --- Extracted Text End ---")
 
                 if "Error:" in text: # Check for the error string returned by pdf_utils
                     st.error("PDF Text Extraction Failed. Check the browser console for details.")
