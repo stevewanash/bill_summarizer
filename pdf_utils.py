@@ -75,7 +75,7 @@ def download_and_extract_text_v2(url, max_pages=50): #Had to rename the function
         with pdfplumber.open(pdf_stream) as pdf:
             pages_to_read = min(len(pdf.pages), max_pages)
 
-            with st.spinner(f"Running OCR on {pages_to_read} pages..."):
+            with st.spinner(f"Running"):
                 for i in range(pages_to_read):
                     page = pdf.pages[i]
                     
