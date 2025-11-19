@@ -10,7 +10,7 @@ import pdfplumber
 # Example: pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 # If on macOS/Linux and installed via brew/apt, this line can often be omitted.
 # If you run into errors, uncomment and update the line below:
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
 
 def pdf_page_to_image(page, scale=300):
     """
