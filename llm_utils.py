@@ -64,13 +64,16 @@ def summarize_bill(bill_text):
         return f"AI Error: {e}"
 
 @st.cache_data(ttl='1h', max_entries=10)
-def generate_insights(feedback_text, api_key):
+def generate_insights(feedback_text):
     """
     Analyzes aggregated citizen feedback.
     """
-    if not api_key:
-        return "Error: Missing API Key"
-        
+    try:
+        # 1. Retrieve the API key securely from Streamlit Secrets
+        api_key = st.secrets["GEMINI_API_KEY"]
+    except KeyError:
+        # Fallback error if the secret isn't configured in the environment
+        return "Error: GEMINI_API_KEY not found in Streamlit secrets."    
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-2.0-flash-lite')
 

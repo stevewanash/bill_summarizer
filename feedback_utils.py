@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import streamlit as st
 from datetime import datetime
+import json
 
 def get_db():
     """
@@ -10,9 +11,16 @@ def get_db():
     if not firebase_admin._apps:
         try:
             # Assumes firebase_key.json is in the root folder
-            key_json = st.secrets["FIREBASE_SERVICE_ACCOUNT"]
-            cred = credentials.Certificate(key_json)
+            json_string = st.secrets["FIREBASE_SERVICE_ACCOUNT"]
+            
+            # 2. CRITICAL STEP: Convert the JSON string into a Python dictionary
+            # json.loads() is what you need to parse the text into an object.
+            key_dict = json.loads(json_string)
+            cred = credentials.Certificate(key_dict)
             firebase_admin.initialize_app(cred)
+        except KeyError:
+            st.error("Firebase Init Error: Secret FIREBASE_SERVICE_ACCOUNT not found. Please check .streamlit/secrets.toml or Streamlit Cloud Secrets.")
+            return None
         except Exception as e:
             st.error(f"Firebase Init Error: {e}")
             return None

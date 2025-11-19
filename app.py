@@ -13,10 +13,6 @@ import feedback_utils
 # Page Config
 st.set_page_config(page_title="KeLegislate AI", layout="wide")
 
-# --- Sidebar: Configuration ---
-st.sidebar.title("⚙️ Settings")
-api_key = st.sidebar.text_input("Gemini API Key", type="password")
-st.sidebar.info("Get your key from Google AI Studio.")
 
 # --- Session State Management ---
 if 'bills' not in st.session_state:
@@ -54,29 +50,26 @@ with tab1:
     if selected_bill_title:
         st.caption(f"Source: {bill_options[selected_bill_title]}")
         
-        if st.button("🚀 Generate AI Summary"):
-            if not api_key:
-                st.error("Please enter a Gemini API Key in the sidebar.")
-            else:
-                url = bill_options[selected_bill_title]
-                
-                with st.status("Processing Bill...", expanded=True) as status:
-                    st.write("📥 Downloading PDF...")
-                    text = pdf_utils.download_and_extract_text(url)
-                    st.session_state['current_bill_text'] = text
-                    # 🚨 TEMPORARY DEBUG LINE 🚨
-                    st.info(f"--- Extracted Text Start --- \n {text[:500]} \n --- Extracted Text End ---")
+        if st.button("🚀 Generate AI Summary"):        
+            url = bill_options[selected_bill_title]
+            
+            with st.status("Processing Bill...", expanded=True) as status:
+                st.write("📥 Downloading PDF...")
+                text = pdf_utils.download_and_extract_text(url)
+                st.session_state['current_bill_text'] = text
+                # 🚨 TEMPORARY DEBUG LINE 🚨
+                st.info(f"--- Extracted Text Start --- \n {text[:500]} \n --- Extracted Text End ---")
 
-                    if "Error:" in text: # Check for the error string returned by pdf_utils
-                        st.error("PDF Text Extraction Failed. Check the browser console for details.")
-                        status.update(label="Failed to Extract Text", state="error", expanded=True)
-                        st.stop() # Stop here if extraction failed!
-                    
-                    st.write("🤖 Analyzing with Gemini AI...")
-                    summary = llm_utils.summarize_bill(text)
-                    st.session_state['current_summary'] = summary
-                    
-                    status.update(label="Complete!", state="complete", expanded=False)
+                if "Error:" in text: # Check for the error string returned by pdf_utils
+                    st.error("PDF Text Extraction Failed. Check the browser console for details.")
+                    status.update(label="Failed to Extract Text", state="error", expanded=True)
+                    st.stop() # Stop here if extraction failed!
+                
+                st.write("🤖 Analyzing with Gemini AI...")
+                summary = llm_utils.summarize_bill(text)
+                st.session_state['current_summary'] = summary
+                
+                status.update(label="Complete!", state="complete", expanded=False)
 
     # Display Result
     if st.session_state['current_summary']:
@@ -172,14 +165,11 @@ with tab3:
         st.subheader("🤖 AI-Generated Policy Insights")
         
         if st.button("Generate AI Insights Report"):
-            if not api_key:
-                st.error("API Key required.")
-            else:
-                # Prepare a string summary of data for the LLM
-                data_summary = f"Total feedback count: {len(df)}\n"
-                data_summary += f"Support counts: {df['support'].value_counts().to_dict()}\n"
-                data_summary += f"Sample citizen comments: {text_concerns[:4000]}" # Truncate for context limit
-                
-                with st.spinner("Analyzing feedback patterns..."):
-                    insight_report = llm_utils.generate_insights(data_summary, api_key)
-                    st.markdown(insight_report)
+            # Prepare a string summary of data for the LLM
+            data_summary = f"Total feedback count: {len(df)}\n"
+            data_summary += f"Support counts: {df['support'].value_counts().to_dict()}\n"
+            data_summary += f"Sample citizen comments: {text_concerns[:4000]}" # Truncate for context limit
+            
+            with st.spinner("Analyzing feedback patterns..."):
+                insight_report = llm_utils.generate_insights(data_summary)
+                st.markdown(insight_report)
