@@ -37,7 +37,7 @@ with tab1:
     st.header("Find and Analyze Bills")
     
     if st.button("🔄 Refresh Bill List from Parliament.go.ke"):
-        with st.spinner("Retrieving latest bills..."):
+        with st.spinner("Retrieving latest bills"):
             st.session_state['bills'] = scraper.get_bills()
             if not st.session_state['bills']:
                 st.error("Could not find bills. The website structure might have changed.")
@@ -54,8 +54,8 @@ with tab1:
         if st.button("🚀 Generate AI Summary"):        
             url = bill_options[selected_bill_title]
             
-            with st.status("Processing Bill...", expanded=True) as status:
-                st.write("Preparing document and running analysis...")
+            with st.status("Processing Bill", expanded=True) as status:
+                st.write("Preparing document and running analysis")
 
                 text = pdf_utils.download_and_extract_text_v2(url)
                 st.session_state['current_bill_text'] = text
@@ -65,7 +65,7 @@ with tab1:
                     status.update(label="Document processing failed", state="error", expanded=True)
                     st.stop() # Stop here if extraction failed!
                 
-                st.write("🤖 Running AI analysis...")
+                st.write("🤖 Running AI analysis")
                 summary = llm_utils.summarize_bill(text)
                 st.session_state['current_summary'] = summary
 
@@ -102,7 +102,7 @@ with tab2:
             submitted = st.form_submit_button("Submit Feedback")
             
             if submitted:
-                with st.spinner("Saving to database..."):
+                with st.spinner("Saving to database"):
                     success = feedback_utils.save_feedback(selected_bill_title, support, rating, concerns)
                     if success:
                         st.success("Thank you! Your voice has been recorded.")
@@ -173,6 +173,6 @@ with tab3:
             data_summary += f"Support counts: {df['support'].value_counts().to_dict()}\n"
             data_summary += f"Sample citizen comments: {text_concerns[:4000]}" # Truncate for context limit
             
-            with st.spinner("Analyzing feedback patterns..."):
+            with st.spinner("Analyzing feedback patterns"):
                 insight_report = llm_utils.generate_insights(data_summary)
                 st.markdown(insight_report)

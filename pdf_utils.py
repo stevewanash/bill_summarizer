@@ -75,26 +75,25 @@ def download_and_extract_text_v2(url, max_pages=50): #Had to rename the function
         with pdfplumber.open(pdf_stream) as pdf:
             pages_to_read = min(len(pdf.pages), max_pages)
 
-            with st.spinner(f"Running OCR on {pages_to_read} pages..."):
-                for i in range(pages_to_read):
-                    page = pdf.pages[i]
+            for i in range(pages_to_read):
+                page = pdf.pages[i]
+                
+                # 1. Attempt basic extraction first (fastest method)
+                page_text = page.extract_text()
+                
+                if page_text and len(page_text.strip()) > 50:
+                    # Success: Use the fast text
+                    extracted_text += page_text.strip() + "\n"
+                else:
+                    # 2. Failure: Run OCR on the page image (slow, but works on scans)
+                        # Render page to PIL image
+                    page_img = pdf_page_to_image(page)
                     
-                    # 1. Attempt basic extraction first (fastest method)
-                    page_text = page.extract_text()
+                    # Use Tesseract to read text from the image
+                    ocr_text = pytesseract.image_to_string(page_img)
                     
-                    if page_text and len(page_text.strip()) > 50:
-                        # Success: Use the fast text
-                        extracted_text += page_text.strip() + "\n"
-                    else:
-                        # 2. Failure: Run OCR on the page image (slow, but works on scans)
-                            # Render page to PIL image
-                        page_img = pdf_page_to_image(page)
-                        
-                        # Use Tesseract to read text from the image
-                        ocr_text = pytesseract.image_to_string(page_img)
-                        
-                        if ocr_text:
-                            extracted_text += ocr_text.strip() + "\n"
+                    if ocr_text:
+                        extracted_text += ocr_text.strip() + "\n"
 
         if not extracted_text:
             return "Error: Downloaded PDF, but neither digital extraction nor OCR found text."
