@@ -52,7 +52,7 @@ def pdf_page_to_image(page, scale=300):
     # in the next troubleshooting step, but try this fix first.
 
 @st.cache_data(ttl="180d", max_entries=40)
-def download_and_extract_text(url, max_pages=50, cache_buster=1.0):
+def download_and_extract_text_v2(url, max_pages=50): #Had to rename the function to v2 to bypass streamlit cache
     """
     Downloads PDF and extracts text, prioritizing OCR if initial extraction fails.
     """

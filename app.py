@@ -75,7 +75,7 @@ with tab1:
             with st.status("Processing Bill...", expanded=True) as status:
                 st.write("📥 Downloading PDF...")
 
-                text = pdf_utils.download_and_extract_text(url, cache_buster=1.0)
+                text = pdf_utils.download_and_extract_text_v2(url)
                 st.session_state['current_bill_text'] = text
 
                 if "Error:" in text: # Check for the error string returned by pdf_utils
