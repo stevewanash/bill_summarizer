@@ -4,13 +4,24 @@ import streamlit as st
 from PIL import Image
 import pytesseract
 import pdfplumber
+import platform
+
+# --- SMART CONFIGURATION ---
+# Automatically detect the operating system
+if platform.system() == "Windows":
+    # This path is only used if running on your local Windows machine
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+else:
+    # On Linux (Streamlit Cloud), we rely on the system PATH
+    # We don't set tesseract_cmd; the server finds it automatically
+    pass
 
 # --- CONFIGURATION (Crucial for Windows users) ---
 # If you are on Windows, you MUST specify the path to your tesseract executable.
 # Example: pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 # If on macOS/Linux and installed via brew/apt, this line can often be omitted.
 # If you run into errors, uncomment and update the line below:
-#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
 
 def pdf_page_to_image(page, scale=300):
     """
