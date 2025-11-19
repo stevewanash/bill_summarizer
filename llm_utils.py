@@ -3,12 +3,19 @@ import os
 import streamlit as st
 
 @st.cache_data(ttl='90d', max_entries=50)
-def summarize_bill(bill_text, api_key):
+def summarize_bill(bill_text):
     """
     Sends bill text to Gemini for summarization and extraction.
     """
-    if not api_key:
-        return "Error: Missing API Key"
+    try:
+        # 1. Retrieve the API key securely from Streamlit Secrets
+        api_key = st.secrets["GEMINI_API_KEY"]
+    except KeyError:
+        # Fallback error if the secret isn't configured in the environment
+        return "Error: GEMINI_API_KEY not found in Streamlit secrets."
+    
+    if not bill_text or len(bill_text) < 100:
+        return "Error: Bill text was empty or unreadable."
 
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-2.0-flash-lite') # Flash is faster/cheaper for large context

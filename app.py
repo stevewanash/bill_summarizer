@@ -73,7 +73,7 @@ with tab1:
                         st.stop() # Stop here if extraction failed!
                     
                     st.write("🤖 Analyzing with Gemini AI...")
-                    summary = llm_utils.summarize_bill(text, api_key)
+                    summary = llm_utils.summarize_bill(text)
                     st.session_state['current_summary'] = summary
                     
                     status.update(label="Complete!", state="complete", expanded=False)
