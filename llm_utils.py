@@ -33,23 +33,27 @@ def summarize_bill(bill_text):
     ## 1. Key Implications for Citizens
     * [Point 1]
     * [Point 2]
+    * [upto 5 points allowed]
 
     ## 2. Key Implications for Businesses/Government
     * [Point 1]
     * [Point 2]
+    * [upto 5 points allowed]
 
     ---
 
     ## Muhtasari
-    [Toa muhtasari rahisi hapa.]
+    [Toa muhtasari hapa.]
 
     ## 1. Athari kwa Wananchi
     * [Athari 1]
     * [Athari 2]
+    * [Idadi inaweza fika 5]
     
     ## 2. Athari kwa Biashara/Serikali
     * [Athari 1]
     * [Athari 2]
+    * [Idadi inaweza fika 5]
 
     ---
 
