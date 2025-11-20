@@ -40,14 +40,14 @@ def summarize_bill(bill_text):
 
     ---
 
-    ## Muhtasari (Simple Swahili Summary, use the same content from the english section)
-    [Toa muhtasari rahisi, usiotumia lugha ya kisheria.]
+    ## Muhtasari
+    [Toa muhtasari rahisi hapa.]
 
-    ## 1. Athari kwa Wananchi (Key Implications for Citizens - Swahili)
+    ## 1. Athari kwa Wananchi
     * [Athari 1]
     * [Athari 2]
     
-    ## 2. Athari kwa Biashara/Serikali (Key Implications for Businesses/Government - Swahili)
+    ## 2. Athari kwa Biashara/Serikali
     * [Athari 1]
     * [Athari 2]
 
